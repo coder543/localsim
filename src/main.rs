@@ -2,6 +2,12 @@ extern crate rustc_serialize;
 extern crate csv;
 extern crate stopwatch;
 extern crate bincode;
+extern crate kiss3d;
+extern crate nalgebra as na;
+
+use na::Vector3;
+use kiss3d::window::Window;
+use kiss3d::light::Light;
 
 mod sim_data;
 use sim_data::Star;
@@ -94,17 +100,29 @@ fn main() {
         let mut named_vec = Vec::new();
         for star in stars {
             //let Some(mscatid) = star.multistar_catalog_id.clone()
-            if star.distance < maxdist && star.id != 0 {
+            if star.distance < maxdist {
                 named_vec.push(star.clone());
             }
         }
         named_vec.sort_by(|a, b| a.distance.partial_cmp(&b.distance).unwrap());
         let starcount = named_vec.len();
+        let mut window = Window::new(&format!("Stars within {:.3} lightyears", maxdist * 3.26156));
+        window.set_light(Light::StickToCamera);
         for star in named_vec {
+            let mut sph = window.add_sphere(0.01);
+            if star.id == 0 {
+                sph.set_color(1.0, 1.0, 0.7);
+            } else {
+                sph.set_color(0.7, 0.7, 1.0);
+            }
+            sph.append_translation(&Vector3::new(star.x as f32, star.y as f32, star.z as f32));
             println!("{:.3} lightyears\n{:?}\n\n", star.distance * 3.26156, star);
         }
         println!("There were {} matching stars.", starcount);
         println!("Processing took {} seconds", sw.elapsed_ms() as f32 / 1000f32);
+        while window.render() {}
+        window.hide();
+        break;
         if !keepgoing {
             break;
         }
