@@ -1,4 +1,4 @@
-#[derive(RustcEncodable, RustcDecodable, PartialEq, Debug, Clone)]
+#[derive(RustcEncodable, RustcDecodable, Debug, Clone)]
 pub struct Star
 {
     //various means of ID
