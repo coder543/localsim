@@ -89,12 +89,13 @@ fn bv2rgb(mut bv: f64) -> (f32, f32, f32) {
     } else {
         b = 1.0;
     }
-    return (r as f32, g as f32, b as f32);
+    
+    (r as f32, g as f32, b as f32)
 }
 
 fn main() {
     let maxdist: f64;
-    let stars = load_database().unwrap();
+    let stars: Vec<Star> = load_database().unwrap();
     let stdin = stdin();
     loop {
         print!("> ");
