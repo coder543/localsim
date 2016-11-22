@@ -1,7 +1,6 @@
 extern crate rustc_serialize;
 extern crate csv;
 extern crate stopwatch;
-extern crate bincode;
 extern crate kiss3d;
 extern crate nalgebra as na;
 
