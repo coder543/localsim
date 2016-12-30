@@ -73,6 +73,12 @@ fn main() {
     let mut window = Window::new(&format!("Stars within {:.3} lightyears", maxdist * 3.26156));
     window.set_framerate_limit(Some(75));
     window.set_light(Light::StickToCamera);
+    // print only the first ten stars within range, rather
+    // than spending forever printing out the matching stars.
+    // this should be adjustable in the future.
+    for star in (&named_vec).into_iter().take(10) {
+        println!("{:.3} lightyears\n{:?}\n\n", star.distance * 3.26156, star);
+    }
     for star in named_vec {
         let mut sph = window.add_sphere(0.015);
         if star.id == 0 {
@@ -80,11 +86,10 @@ fn main() {
         } else {
             let (r, g, b) = star.bv2rgb_opt().or(Some((1.0, 1.0, 1.0))).unwrap();
             let mag = star.magnitude as f32;
-            let lum = 2.512f32.powf(-mag);
+            let lum = f32::min(250.0 * 2.512f32.powf(-mag), 1.0);
             sph.set_color(r * lum, g * lum, b * lum);
         }
         sph.append_translation(&Vector3::new(star.x as f32, star.y as f32, star.z as f32));
-        println!("{:.3} lightyears\n{:?}\n\n", star.distance * 3.26156, star);
     }
     println!("There were {} matching stars.", starcount);
     println!("Processing took {} seconds",
