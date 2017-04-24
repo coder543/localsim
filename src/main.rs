@@ -4,7 +4,7 @@ extern crate stopwatch;
 extern crate kiss3d;
 extern crate nalgebra as na;
 
-use na::Vector3;
+use na::Translation3;
 use kiss3d::window::Window;
 use kiss3d::light::Light;
 
@@ -89,7 +89,7 @@ fn main() {
             let lum = f32::min(250.0 * 2.512f32.powf(-mag), 1.0);
             sph.set_color(r * lum, g * lum, b * lum);
         }
-        sph.append_translation(&Vector3::new(star.x as f32, star.y as f32, star.z as f32));
+        sph.append_translation(&Translation3::new(star.x as f32, star.y as f32, star.z as f32));
     }
     println!("There were {} matching stars.", starcount);
     println!("Processing took {} seconds",
